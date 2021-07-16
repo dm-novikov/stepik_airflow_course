@@ -1,0 +1,24 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=airflow
+    ports:
+      - 5432:5432
+    restart: always
+
+  airflow:
+    build: .
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - AIRFLOW__CORE__FERNET_KEY=HXJmviZ45J6R0bM1DFFij0JJ1ca_JMDWo9Z-Q-wqsFk=
+      - AIRFLOW__WEBSERVER__SECRET_KEY=b27dfe9846d048294adc0df96ad43239fa325db739a0a69a60672e3e6272
+    ports:
+      - 8001:8080
+    volumes:
+      - ./airflow/dags:/usr/local/airflow/dags
