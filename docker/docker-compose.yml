@@ -22,3 +22,9 @@ services:
       - 8001:8080
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
+    
+   adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9090:8080
