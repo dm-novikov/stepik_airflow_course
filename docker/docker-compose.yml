@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
     restart: always
-
+  
   airflow:
     build: .
     restart: always
@@ -21,10 +21,12 @@ services:
     ports:
       - 8001:8080
     volumes:
-      - ./airflow/dags:/usr/local/airflow/dags
-    
-   adminer:
+      - /Users/kelly/Desktop/Docker_Test/Airflow_Stepik/airflow-stepik/dags:/usr/local/airflow/dags
+      
+  adminer:
     image: adminer
     restart: always
     ports:
-      - 9090:8080
+      - 8080:8080
+    depends_on:
+      - postgres

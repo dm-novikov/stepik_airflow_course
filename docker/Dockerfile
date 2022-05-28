@@ -4,6 +4,7 @@ ARG AIRFLOW_VERSION=1.10.14
 ARG AIRFLOW_USER_HOME=/usr/local/airflow
 ENV AIRFLOW_HOME=${AIRFLOW_USER_HOME}
 
+RUN pip install flask-bcrypt
 RUN pip install apache-airflow[postgres]==${AIRFLOW_VERSION}
 RUN pip install SQLAlchemy==1.3.23
 
