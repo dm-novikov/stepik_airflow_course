@@ -1,31 +1,41 @@
+# В этом файле уже 3 сервиса
 version: '3'
 services:
+  # Постгрес база в отдельном контейнере
   postgres:
+    # Устанавливаем готовый образ
     image: postgres
+    # Задаем глобальные переменные для доступа к PG
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=airflow 
+      - POSTGRES_DB=airflow
     ports:
       - 5432:5432
     restart: always
-  
-  airflow:
-    build: .
-    restart: always
-    depends_on:
-      - postgres
-    environment:
-      - AIRFLOW__CORE__FERNET_KEY=HXJmviZ45J6R0bM1DFFij0JJ1ca_JMDWo9Z-Q-wqsFk=
-    ports:
-      - 8001:8080
-    volumes:
-      - /Users/kelly/Desktop/Docker_Test/Airflow_Stepik/airflow-stepik/dags:/usr/local/airflow/dags
-      
+
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8088:8088
+      - 8080:8080
+
+  # Airflow в отдельном контейнере
+  airflow:
+    # Сборка из Dockerfile
+    build: .
+    restart: always
+    # Определчет порядок запуска сервисов
     depends_on:
       - postgres
+    # Airflow поддерживает конфигурирование переменных из конфиг файла
+    # https://airflow.apache.org/docs/apache-airflow/stable/howto/set-config.html
+    environment:
+      - AIRFLOW__CORE__FERNET_KEY=HXJmviZ45J6R0bM1DFFij0JJ1ca_JMDWo9Z-Q-wqsFk= # Для шифрования подключений
+      - AIRFLOW__WEBSERVER__SECRET_KEY=b27dfe9846d048294adc0df96ad43239fa325db739a0a69a60672e3e6272
+    # Пробрасываем порты
+    ports:
+      - 8001:8080
+    # Пробрасываем папку с дагами
+    volumes:
+      - ./dags:/usr/local/airflow/dags
